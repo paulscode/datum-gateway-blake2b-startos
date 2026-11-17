@@ -5,6 +5,8 @@ export const manifest = setupManifest({
   id: 'datum',
   title: 'Datum Gateway (BLAKE2b)',
   license: 'mit',
+  // PaulsCode registry policy: every release targets StartOS 0.4.0.2 or newer.
+  osVersion: '0.4.0.2',
   packageRepo: 'https://github.com/paulscode/datum-gateway-blake2b-startos',
   upstreamRepo: 'https://github.com/paulscode/datum_gateway',
   marketingUrl: 'https://convoy.xyz',
