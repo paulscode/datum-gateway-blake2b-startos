@@ -3,10 +3,10 @@ import { bitcoinDescription, long, short } from './i18n'
 
 export const manifest = setupManifest({
   id: 'datum',
-  title: 'Datum Gateway',
+  title: 'Datum Gateway (BLAKE2b)',
   license: 'mit',
-  packageRepo: 'https://github.com/horizon-btc/datum-gateway-startos',
-  upstreamRepo: 'https://github.com/CONVOYMining/datum_gateway',
+  packageRepo: 'https://github.com/paulscode/datum-gateway-blake2b-startos',
+  upstreamRepo: 'https://github.com/paulscode/datum_gateway',
   marketingUrl: 'https://convoy.xyz',
   donationUrl: null,
   description: { short, long },

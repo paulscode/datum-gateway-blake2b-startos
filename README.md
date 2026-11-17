@@ -1,3 +1,11 @@
+> **PaulsCode build: Datum Gateway (BLAKE2b).** A drop-in replacement for the #pow package (horizon-btc/datum-gateway-startos, distributed by mempool.guide), with the gateway
+> built from [paulscode/datum_gateway](https://github.com/paulscode/datum_gateway/tree/blake2b-full-payout-7). It adds:
+> serving miners below the pool's minimum difficulty (on by default; work stays committed at the pool's
+> minimum, so pool credit is unchanged), difficulty requests in the Stratum password (on by default),
+> vardiff that measures at the difficulty it serves, closing TLS probes at once, and a
+> `datum.capabilities` request for tools such as Pickhash. Both settings are under
+> Actions → Stratum Server Settings. Published in the [PaulsCode registry](https://start9.paulscode.com).
+
 <p align="center">
   <img src="icon.svg" alt="Datum Gateway Logo" width="21%">
 </p>

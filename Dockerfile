@@ -7,8 +7,9 @@ RUN apt update && \
 
 ADD ./datum_gateway /parent_dir/datum_gateway
 WORKDIR /parent_dir/datum_gateway
-RUN git status
-RUN cmake . && make
+# The submodule's .git points outside the build context, so build without git, as
+# Start9's package does; the binary then reports no commit hash.
+RUN BITCOIN_GENBUILD_NO_GIT=1 cmake . && make
 
 FROM debian:bookworm-slim AS final
 
