@@ -1,17 +1,14 @@
 import { VersionInfo } from '@start9labs/start-sdk'
 
 export const current = VersionInfo.of({
-  version: '#pow:0.5.0:10',
+  version: '#pow:0.5.0:11',
   releaseNotes: {
-    en_US: `PaulsCode's build of Datum Gateway for BLAKE2b, an update for the #pow package (mempool.guide).
+    en_US: `Fixes from independent reviews of the gateway changes.
 
-- Rented rigs keep their own difficulty. With "Serve miners below the pool's minimum difficulty" (on by default), each miner gets a difficulty that suits its hashrate even when the pool's minimum is far higher, as CONVOY's is behind a busy gateway. Work is still committed at the pool's minimum and only shares meeting it are sent to the pool, so pool credit is unchanged. Tested live on CONVOY: same pool credit, no "High Worker Difficulty" warnings on MiningRigRentals, and no reconnects every couple of minutes.
-- Miners can request a difficulty in the Stratum password (d=N), also on by default. Pickhash uses it to give each rented rig the difficulty MiningRigRentals expects.
-- Vardiff measures at the difficulty it actually serves, which stops large overshoots after a step up.
-- A connection that opens with a TLS handshake is closed at once, so MiningRigRentals' pool test no longer reports a working endpoint as failing.
-- Answers datum.capabilities, so tools such as Pickhash can tell what this gateway supports.
-
-Both new settings are under Actions → Stratum Server Settings.`
+- A rig no longer gets the same work twice when a quickdiff arrives for a job it hasn't been sent yet. Before, the quickdiff sent a copy of that job at once and the regular send repeated it, so the rig's shares came back as duplicates. Now only the new difficulty is sent, and the job arrives once.
+- A share the gateway keeps from the pool (below the pool's minimum) is now answered as the pool would answer it when its job can't be submitted: stale for an anti-withholding assignment already disclosed, refused for a job with no assignment. Before, such shares were accepted, so a rig's measured hashrate counted work the pool would not take.
+- A block the gateway can recognise in a quickdiff share for an earlier job is now submitted before the share is refused. Before, such a share was refused first.
+- A quickdiff share for another job is answered and recorded as unknown work, rather than as a hashing error that reads like a hardware fault.`
   },
   migrations: {
     up: async ({ effects }) => {},
