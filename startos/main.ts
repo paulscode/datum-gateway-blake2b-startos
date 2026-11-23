@@ -2,6 +2,7 @@ import { FileHelper } from '@start9labs/start-sdk'
 import { manifest } from 'bitcoin-knots-startos/startos/manifest'
 import { configJson } from './fileModels/datum_gateway_config.json'
 import { i18n } from './i18n'
+import { bounded, unanswered } from './boundedCheck'
 import { sdk } from './sdk'
 import {
   bitcoindRpcUrl,
@@ -74,23 +75,29 @@ export const main = sdk.setupMain(async ({ effects }) => {
       },
       ready: {
         display: i18n('Web Interface'),
-        fn: () =>
-          sdk.healthCheck.checkPortListening(effects, uiPort, {
-            successMessage: i18n('The Datum Gateway dashboard is ready'),
-            errorMessage: i18n('The Datum Gateway dashboard is not ready'),
-          }),
+        fn: bounded(
+          () =>
+            sdk.healthCheck.checkPortListening(effects, uiPort, {
+              successMessage: i18n('The Datum Gateway dashboard is ready'),
+              errorMessage: i18n('The Datum Gateway dashboard is not ready'),
+            }),
+          unanswered,
+        ),
       },
       requires: [],
     })
     .addHealthCheck('stratum-interface', {
       ready: {
         display: i18n('Stratum Interface'),
-        fn: () =>
-          sdk.healthCheck.checkPortListening(effects, stratumPort, {
-            timeout: 1000,
-            successMessage: i18n('Stratum server is available'),
-            errorMessage: i18n('Stratum server is unavailable'),
-          }),
+        fn: bounded(
+          () =>
+            sdk.healthCheck.checkPortListening(effects, stratumPort, {
+              timeout: 1000,
+              successMessage: i18n('Stratum server is available'),
+              errorMessage: i18n('Stratum server is unavailable'),
+            }),
+          unanswered,
+        ),
       },
       requires: ['datum'],
     })
@@ -98,7 +105,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
       ready: {
         display: i18n('Number of Stratum Clients Connected'),
         trigger: sdk.trigger.cooldownTrigger(10000),
-        fn: async () => {
+        fn: bounded(async () => {
           try {
             const { stdout } = await datumSub.exec([
               'sh',
@@ -120,7 +127,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
               message: i18n("Couldn't fetch the number of clients"),
             }
           }
-        },
+        }, unanswered),
       },
       requires: ['datum'],
     })
@@ -128,7 +135,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
       ready: {
         display: i18n('Estimated Hashrate'),
         trigger: sdk.trigger.cooldownTrigger(10000),
-        fn: async () => {
+        fn: bounded(async () => {
           try {
             const { stdout } = await datumSub.exec([
               'sh',
@@ -150,7 +157,7 @@ export const main = sdk.setupMain(async ({ effects }) => {
               message: i18n("Couldn't fetch the hashrate"),
             }
           }
-        },
+        }, unanswered),
       },
       requires: ['datum'],
     })

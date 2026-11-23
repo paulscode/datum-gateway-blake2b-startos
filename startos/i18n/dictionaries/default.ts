@@ -139,6 +139,7 @@ const dict = {
   'PoW algorithm: auto (follow GBT), blake2b (Knots header v2 / Antminer A3), or sha256d': 282,
 
   // common
+  'This check has not finished after a minute': 304,
   'Must be alphanumeric.': 1000,
 } as const
 

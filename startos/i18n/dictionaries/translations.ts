@@ -139,6 +139,7 @@ export default {
     282: 'Algorithme PoW: automatique (suit GBT), blake2b (en-tête Knots v2 / Antminer A3) ou sha256d',
 
     // common
+    304: "Cette vérification n'est pas terminée après une minute",
     1000: 'Doit être alphanumérique.',
   },
 } satisfies Record<string, LangDict>
